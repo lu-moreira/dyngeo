@@ -109,7 +109,7 @@ func (db db) getPoint(ctx context.Context, input GetPointInput) (*GetPointOutput
 		return nil, err
 	}
 
-	rng, err := attributevalue.Marshal(input.RangeKeyValue)
+	rng, err := attributevalue.Marshal(input.RangeKeyValue.String())
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -136,7 +136,7 @@ func (db db) putPoint(ctx context.Context, input PutPointInput) (*PutPointOutput
 		return nil, err
 	}
 
-	rng, err := attributevalue.Marshal(input.RangeKeyValue)
+	rng, err := attributevalue.Marshal(input.RangeKeyValue.String())
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -190,7 +190,7 @@ func (db db) batchWritePoints(ctx context.Context, inputs []PutPointInput) (*Bat
 			return nil, err
 		}
 
-		rng, err := attributevalue.Marshal(input.RangeKeyValue)
+		rng, err := attributevalue.Marshal(input.RangeKeyValue.String())
 		if err != nil {
 			log.Println(err)
 			return nil, err
@@ -238,7 +238,7 @@ func (db db) updatePoint(ctx context.Context, input UpdatePointInput) (*UpdatePo
 		return nil, err
 	}
 
-	rgk, err := attributevalue.Marshal(input.RangeKeyValue)
+	rgk, err := attributevalue.Marshal(input.RangeKeyValue.String())
 	if err != nil {
 		return nil, err
 	}
@@ -270,7 +270,7 @@ func (db db) deletePoint(ctx context.Context, input DeletePointInput) (*DeletePo
 		return nil, err
 	}
 
-	rgk, err := attributevalue.Marshal(input.RangeKeyValue)
+	rgk, err := attributevalue.Marshal(input.RangeKeyValue.String())
 	if err != nil {
 		return nil, err
 	}
