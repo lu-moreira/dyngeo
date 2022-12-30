@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"log"
 	"sync"
 
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
@@ -37,10 +36,9 @@ func New(config DynGeoConfig) (*DynGeo, error) {
 		GeoHashAttributeName:  "geohash",
 		GeoJSONAttributeName:  "geoJson",
 		GeoHashIndexName:      "geohash-index",
-		HashKeyLength:         2,
-		LongitudeFirst:        true,
-
-		DynamoDBClient: config.DynamoDBClient,
+		HashKeyLength:         5,
+		LongitudeFirst:        false,
+		DynamoDBClient:        config.DynamoDBClient,
 	}
 
 	err := mergo.Merge(&config, defaultConfig)
@@ -274,7 +272,6 @@ func (dg DynGeo) latLngFromItem(item map[string]types.AttributeValue) (*s2.LatLn
 		}
 
 		latLng := s2.LatLngFromDegrees(lat, lng)
-		log.Println(latLng.String())
 		return &latLng, nil
 	}
 
