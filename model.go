@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/golang/geo/s2"
 )
 
@@ -33,7 +34,7 @@ func newGeoJSONAttribute(p GeoPoint, lonFirst bool) GeoJSONAttribute {
 }
 
 type PointInput struct {
-	RangeKeyValue string
+	RangeKeyValue types.AttributeValue
 	GeoPoint      GeoPoint
 }
 

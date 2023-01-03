@@ -143,6 +143,11 @@ func loadData(ctx context.Context) {
 			panic(err)
 		}
 
+		rangeKey, err := attributevalue.Marshal(id.String())
+		if err != nil {
+			panic(err)
+		}
+
 		input := dyngeo.PutPointInput{
 			PutItemInput: dynamodb.PutItemInput{
 				Item: map[string]types.AttributeValue{
@@ -151,7 +156,7 @@ func loadData(ctx context.Context) {
 				},
 			},
 		}
-		input.RangeKeyValue = id.String()
+		input.RangeKeyValue = rangeKey
 		input.GeoPoint = dyngeo.GeoPoint{
 			Latitude:  s.Position.Latitude,
 			Longitude: s.Position.Longitude,
