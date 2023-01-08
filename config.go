@@ -18,6 +18,7 @@ type DynGeoConfig struct {
 	GeoHashIndexName      string
 	HashKeyLength         int8
 	LongitudeFirst        bool
+	UnmarshalAsJSON       bool
 
 	DynamoDBClient  *dynamodb.Client
 	s2RegionCoverer s2.RegionCoverer
