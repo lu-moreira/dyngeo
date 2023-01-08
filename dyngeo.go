@@ -279,7 +279,11 @@ func (dg DynGeo) latLngFromItem(item map[string]types.AttributeValue) (*s2.LatLn
 }
 
 func (dg DynGeo) unmarshallOutput(output []map[string]types.AttributeValue, out interface{}) error {
-	err := attributevalue.UnmarshalListOfMaps(output, out)
+	err := attributevalue.UnmarshalListOfMapsWithOptions(output, out, func(options *attributevalue.DecoderOptions) {
+		if dg.Config.UnmarshalAsJSON {
+			options.TagKey = "json"
+		}
+	})
 	if err != nil {
 		return err
 	}
