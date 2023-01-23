@@ -21,7 +21,7 @@ import (
 
 var (
 	dbClient *dynamodb.Client
-	dg       *dyngeo.DynGeo
+	dg       *dyngeo.Geo
 )
 
 const BATCH_SIZE = 25
@@ -60,17 +60,19 @@ func main() {
 
 	dbClient = dynamodb.NewFromConfig(awsCfg)
 
-	dg, err = dyngeo.New(dyngeo.DynGeoConfig{
-		DynamoDBClient: dbClient,
-		HashKeyLength:  5,
-		TableName:      TableName,
-	})
+	cfg := dyngeo.MakeConfig(
+		dyngeo.WithDynamoClient(dbClient),
+		dyngeo.WithHashkeyLen(5),
+		dyngeo.WithTableName(TableName),
+	)
+
+	dg, err = dyngeo.New(cfg)
 	if err != nil {
 		panic(err)
 	}
 
 	ctx := context.Background()
-	setupTable(ctx, true)
+	setupTable(ctx, *cfg, true)
 	loadData(ctx)
 	queryData(ctx)
 }
@@ -93,7 +95,7 @@ func tableExists(ctx context.Context, tableName string) (bool, error) {
 	return true, err
 }
 
-func setupTable(ctx context.Context, mustRecreateTable bool) {
+func setupTable(ctx context.Context, cfg dyngeo.Config, mustRecreateTable bool) {
 	exists, _ := tableExists(ctx, TableName)
 	if exists && mustRecreateTable {
 		_, err := dbClient.DeleteTable(ctx, &dynamodb.DeleteTableInput{
@@ -104,7 +106,7 @@ func setupTable(ctx context.Context, mustRecreateTable bool) {
 		}
 	}
 
-	createTableInput := dyngeo.GetCreateTableRequest(dg.Config)
+	createTableInput := dyngeo.GetCreateTableRequest(cfg)
 	createTableInput.ProvisionedThroughput.ReadCapacityUnits = aws.Int64(5)
 	createTableOutput, err := dbClient.CreateTable(ctx, createTableInput)
 	if err != nil {

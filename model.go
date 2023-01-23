@@ -118,6 +118,8 @@ func newGeoHashRange(min uint64, max uint64) geoHashRange {
 	}
 }
 
+// MERGE_THRESHOLD ...
+// const MERGE_THRESHOLD = 2
 // func (g *geoHashRange) tryMerge(r geoHashRange) bool {
 // 	if r.rangeMin-g.rangeMax <= MERGE_THRESHOLD && r.rangeMin > g.rangeMax {
 // 		g.rangeMax = r.rangeMax
